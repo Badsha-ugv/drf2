@@ -1,0 +1,43 @@
+# Ignore virtual environment files
+venv/
+__pycache__/
+*.pyc
+
+# Ignore database files
+*.sqlite3
+*.db
+
+# Ignore settings files with sensitive data
+*.env
+*.ini
+
+# Ignore logs and other generated files
+*.log
+*.pot
+*.pyo
+
+# Ignore media and static files
+media/
+static/
+
+# Ignore secret key files
+*.key
+
+# Ignore local development settings
+local_settings.py
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore compiled Python bytecode
+*.pyc
+
+# Ignore system and backup files
+*~
+# Python-specific files
+*.pyc
+*.pyo
+__pycache__/
+*.egg-info/
+dist/
+build/

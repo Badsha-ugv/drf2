@@ -1,9 +1,12 @@
 from rest_framework import generics
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.decorators import permission_classes
 from django.db.models import Q
 from django.shortcuts import render,get_object_or_404,redirect
 from .models import Task
 from .serializers import TaskSerializer
+from .forms import TaskForm , RegistrationForm
+from django.contrib.auth.decorators import login_required
 
 
 class TaskListCreateView(generics.ListCreateAPIView):
@@ -44,7 +47,7 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
-
+@login_required(login_url='user_login')
 def index(request):
     return render(request, 'index.html')
 
@@ -54,7 +57,7 @@ def task_detail(request, pk=None):
     return render(request, 'taskView.html', {'task': task})
 
 
-from .forms import TaskForm  # Create a form for updating tasks
+
 
 def task_update(request, pk):
     task = get_object_or_404(Task, pk=pk)
@@ -63,8 +66,53 @@ def task_update(request, pk):
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
-            return redirect('index')  # Redirect to the task list after updating
+            return redirect('index')  
     else:
         form = TaskForm(instance=task)
 
     return render(request, 'taskUpdate.html', {'form': form, 'task': task})
+
+from django.contrib.auth import login,logout,authenticate
+def registration(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user =form.save()
+            login(request,user)
+            return redirect('index')
+    else:
+        form = RegistrationForm()
+        return render(request,'registration.html', {'form': form})
+        
+
+from django.http import JsonResponse
+from rest_framework.authtoken.models import Token
+
+
+
+def user_login(request):
+    # if request.user.is_authenticated():
+    #     return redirect('index')
+    
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            try:
+                login(request, user)
+            except:
+                
+                return redirect('index')
+            return redirect('index')
+        else:
+            return redirect('login')
+            # token, created = Token.objects.get_or_create(user=user)
+            # return JsonResponse({'token': token.key, 'user_id': user.id})
+        
+    return render(request,'login.html')
+
+@login_required(login_url='user_login')
+def logout_view(request):
+    logout(request)
+    return redirect('user_login')

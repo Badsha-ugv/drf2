@@ -41,9 +41,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'rest_framework.authtoken',
     'task',
 
 ]
+
+REST_FRAMEWORK = {
+    # ...
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    # ...
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -75,7 +84,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'task_manager.wsgi.application'
 
-
+# LOGIN_REDIRECT_URL = 'user_login'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 

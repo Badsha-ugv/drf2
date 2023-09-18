@@ -11,6 +11,9 @@
 
 <body>
     <div class="container mt-5">
+        {% if  request.user.is_authenticated %}
+        <a href="{% url 'user_logout' %}">logout</a>
+        {% endif %}
         <h1>Task Manager</h1>
         <form id="task-form">
             <div class="form-group">

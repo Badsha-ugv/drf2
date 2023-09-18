@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2>Login</h2>
+    <form id="login-form" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+
+
+    You don't have an account? <a href="{% url 'registration' %}">Register</a> Now
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<!-- <script>
+    
+    $(document).ready(function () {
+            $('#login-form').on('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission behavior
+
+                var username = $('#username').val();
+                var password = $('#password').val();
+
+                $.ajax({
+                    url: '{% url "user_login" %}', // Replace with the correct URL
+                    method: 'POST',
+                    data: {
+                        username: username,
+                        password: password,
+                    },
+                    success: function (data) {
+                        // Store the token in local storage or as needed
+                        localStorage.setItem('token', data.token);
+
+                        // Redirect to the desired page (e.g., dashboard)
+                        window.location.href = '/index/'; // Replace with your desired redirect URL
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        // Handle login errors
+                        console.error('Login failed:', errorThrown);
+                    },
+                });
+            });
+        });
+
+</script> -->
+{% endblock %}
